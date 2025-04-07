@@ -1,0 +1,30 @@
+stages:
+  - build
+  - image-scanning
+
+variables:
+  DOCKER_IMAGE: "spring-petclinic:latest"
+
+
+
+docker-build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - docker save -o image.tar $DOCKER_IMAGE
+  artifacts:
+    paths:
+      - image.tar
+    expire_in: 1 hour
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"
+
+image-scanning:
+  stage: image-scanning
+  image: docker:latest
+  script:
+    - |
+      curl -s -o cortexcli $(curl -s "https://api-japac-cxsiamp.xdr.jp.paloaltonetworks.com/public_api/cwp/releases/cortexcli/download-link?os=linux&architecture=amd64" -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" -H "Authorization: ${CORTEX_API_KEY}" | jq -r ".signed_url")
