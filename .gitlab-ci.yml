@@ -32,4 +32,5 @@ image-scanning:
       apk add --no-cache curl jq
       curl -s -o cortexcli $(curl -s "https://api-japac-cxsiamp.xdr.jp.paloaltonetworks.com/public_api/cwp/releases/cortexcli/download-link?os=linux&architecture=amd64" -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" -H "Authorization: ${CORTEX_API_KEY}" | jq -r ".signed_url")
       chmod +x cortexcli
-      ./cortexcli --api-key-id $CORTEX_API_KEY_ID --api-key $CORTEX_API_KEY --api-base-url $CORTEX_API_BASE_URL image scan image.jar
+      ./cortexcli --api-key-id $CORTEX_API_KEY_ID --api-key $CORTEX_API_KEY --api-base-url $CORTEX_API_BASE_URL image scan image.tar
+      
