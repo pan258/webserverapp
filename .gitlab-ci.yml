@@ -1,7 +1,7 @@
 stages:
   - code-scan
   - build
-  - image-scann
+  - image-scan
 
 variables:
   DOCKER_IMAGE: "spring-petclinic:latest"
