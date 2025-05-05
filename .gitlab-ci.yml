@@ -1,7 +1,7 @@
 stages:
   - code-scan
   - build
-  - image-scanning
+  - image-scann
 
 variables:
   DOCKER_IMAGE: "spring-petclinic:latest"
@@ -9,7 +9,7 @@ variables:
   PRISMA_API_URL: "https://api.jp.prismacloud.io"
   PRISMA_URL: "https://asia-northeast1.cloud.twistlock.com/japan-1167259786"
 
-prisma_cloud:
+code-scan:
   image: 
     name: bridgecrew/checkov:latest
     entrypoint:
@@ -46,8 +46,8 @@ docker-build:
 # chmod +x cortexcli
 # ./cortexcli --api-key-id $CORTEX_API_KEY_ID --api-key $CORTEX_API_KEY --api-base-url $CORTEX_API_BASE_URL image scan image.tar
 
-image-scanning:
-  stage: image-scanning
+image-scan:
+  stage: image-scan
   image: docker:latest
   script:
     - |
