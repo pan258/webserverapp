@@ -7,6 +7,7 @@ variables:
   DOCKER_IMAGE: "spring-petclinic:latest"
   CORTEX_API_BASE_URL: "https://api-japac-cxsiamp.xdr.jp.paloaltonetworks.com"
   PRISMA_API_URL: "https://api.jp.prismacloud.io"
+  PRISMA_URL: "https://asia-northeast1.cloud.twistlock.com/japan-1167259786"
 
 prisma_cloud:
   image: 
@@ -25,8 +26,6 @@ prisma_cloud:
           junit: prismacloud.xml
   allow_failure: false
 
-
-
 docker-build:
   stage: build
   image: docker:latest
@@ -42,13 +41,23 @@ docker-build:
   rules:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"
 
+# apk add --no-cache curl jq
+# curl -s -o cortexcli $(curl -s "https://api-japac-cxsiamp.xdr.jp.paloaltonetworks.com/public_api/cwp/releases/cortexcli/download-link?os=linux&architecture=amd64" -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" -H "Authorization: ${CORTEX_API_KEY}" | jq -r ".signed_url")
+# chmod +x cortexcli
+# ./cortexcli --api-key-id $CORTEX_API_KEY_ID --api-key $CORTEX_API_KEY --api-base-url $CORTEX_API_BASE_URL image scan image.tar
+
 image-scanning:
   stage: image-scanning
   image: docker:latest
   script:
     - |
-      apk add --no-cache curl jq
-      curl -s -o cortexcli $(curl -s "https://api-japac-cxsiamp.xdr.jp.paloaltonetworks.com/public_api/cwp/releases/cortexcli/download-link?os=linux&architecture=amd64" -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" -H "Authorization: ${CORTEX_API_KEY}" | jq -r ".signed_url")
-      chmod +x cortexcli
-      ./cortexcli --api-key-id $CORTEX_API_KEY_ID --api-key $CORTEX_API_KEY --api-base-url $CORTEX_API_BASE_URL image scan image.tar
+      wget --header "Authorization: Basic $(echo -n $PRISMA_ACCESS_KEY:$PRISMA_SECRET_KEY | base64 | tr -d '\n')" "$PRISMA_URL/api/v1/util/twistcli"
+      chmod a+x ./twistcli
+      ./twistcli images scan --docker-address http://docker:2375 --address $PRISMA_URL --user $PRISMA_ACCESS_KEY --password $PRISMA_SECRET_KEY --details --tarball image.tar
+
+
+
+
+
+
       
