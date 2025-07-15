@@ -5,6 +5,6 @@ metadata:
 spec:
   containers:
     - name: serverapp
-      image: registry.wskn.local/webapp/webrelease:latest
+      image: lil00/webrelease:latest
       ports:
       - containerPort: 8080
