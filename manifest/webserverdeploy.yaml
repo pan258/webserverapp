@@ -1,13 +1,25 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: serverapp
 spec:
-  containers:
-    - name: serverapp
-      image: lil00/webrelease:latest
-      ports:
-      - containerPort: 8080
+  replicas: 0
+  selector:
+    matchLabels:
+      app: serverapp
+  template:
+    metadata:
+      labels:
+        app: serverapp
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: serverapp
+        image: lil00/webrelease:latest
+        ports:
+        - containerPort: 8080
+---
 apiVersion: v1
 kind: Service
 metadata:
