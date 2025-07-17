@@ -13,7 +13,7 @@ spec:
         app: serverapp
     spec:
       nodeSelector:
-        "beta.kubernetes.io/os": linux
+        "kubernetes.io/os": linux
       containers:
       - name: serverapp
         image: lil00/webrelease:latest
