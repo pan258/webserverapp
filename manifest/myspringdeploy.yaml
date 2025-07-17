@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: panw-webserver
-  namespace: panw-webserver
+  namespace: demo
   labels:
     app: panw-webserver
 spec:
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: panw-webserver-lb
-  namespace: panw-webserver
+  namespace: demo
 spec:
   type: LoadBalancer
   selector:
